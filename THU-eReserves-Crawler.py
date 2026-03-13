@@ -14,9 +14,7 @@ try:
     with open('config.json', 'r', encoding='utf-8') as f:
         config         = json.load(f)
         jcclient       = config['jcclient']
-        bookList       = config['bookList']
-        start          = config['start']
-        end            = config['end']        
+        bookList       = config['bookList']   
 except:
     print('Failed to load config.json. Please check the file.')
     sys.exit()
@@ -81,12 +79,6 @@ for bookId in bookList:
         # download JPG files and add to PDF
         for item in response:
             num += 1
-            if num < start:
-                continue
-            if end != -1 and num > end:
-                pdf.output(f'{title}.pdf')
-                print(f'Finished downloading {title}.pdf.')
-                sys.exit()
             sleep(random.uniform(0.2, 0.5))
             # retry 3 times if failed
             for i in range(4):
