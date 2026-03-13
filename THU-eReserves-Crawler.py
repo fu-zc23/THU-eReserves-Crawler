@@ -14,7 +14,6 @@ try:
     with open('config.json', 'r', encoding='utf-8') as f:
         config         = json.load(f)
         jcclient       = config['jcclient']
-        BotuReadKernel = config['BotuReadKernel']
         bookId         = config['bookId']
         start          = config['start']
         end            = config['end']        
@@ -24,11 +23,8 @@ except:
     
 num     = 0
 flag    = False
-cookie  = 'BotuReadKernel=' + BotuReadKernel
 url     = 'https://ereserves.lib.tsinghua.edu.cn'
 headers = {
-    'botureadkernel': BotuReadKernel,
-    'cookie'        : cookie,
     'jcclient'      : jcclient,
     'user-agent'    : 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36'
 }
@@ -45,6 +41,14 @@ if not flag:
     print(f'The source of {title} is not 数字资源平台.')
     sys.exit()
 print(f'Downloading {title}...')
+
+# get BotuReadKernel
+readurl  = source['READURL']
+response = requests.post('https://ereserves.lib.tsinghua.edu.cn/userapi/ReadBook/GetResourcesUrl', headers=headers, json={'id': readurl})
+response = requests.get(response.json()['data'], allow_redirects=False)
+BotuReadKernel = response.cookies.get('BotuReadKernel')
+headers['botureadkernel'] = BotuReadKernel
+headers['cookie'] = 'BotuReadKernel=' + BotuReadKernel
 
 # selectJgpBookChapters
 readurl  = source['READURL']

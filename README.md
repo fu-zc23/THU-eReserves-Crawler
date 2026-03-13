@@ -18,29 +18,23 @@
 
 ![bookDetail](/img/bookDetail.jpg)
 
-点击书籍主页的 “立即阅读” ，`F12` 打开开发者工具，切换到 “网络” 标签页并刷新页面。
-
-找到 `selectJgpBookChapters` 请求，将请求标头中的 `Botureadkernel` 字段复制到 `config.json` 文件的对应位置。
-
-![Botureadkernel](/img/readKernel.jpg)
-
-最后自行设置页码范围。 `config.json` 中的 `start` 项设置为起始页码（含）； `end` 项设置为终止页码（含），若到最后一页终止可设置为 `-1` 。
+最后自行设置页码范围。`config.json` 中的 `start` 项设置为起始页码（含）；`end` 项设置为终止页码（含），若到最后一页终止可设置为 `-1`。
 
 ### 2. 运行程序
 
-确保安装所有依赖后运行该程序，注意 `fpdf` 需要安装 `fpdf2` 。
+确保安装所有依赖后运行该程序，注意 `fpdf` 需要安装 `fpdf2`。
 
 ```
 python THU-eReserves-Crawler.py
 ```
 
-每页的下载通常需要约 0.5 秒，请耐心等待。如果某页下载失败，会在 pdf 文件中用空白页代替。最后文件 `{title}.pdf` 会保存到当前目录，原书名中的非法字符会被替换为 `.` 。
+每页的下载通常需要约 0.5 秒，请耐心等待。如果某页下载失败，会在 pdf 文件中用空白页代替。最后文件 `{title}.pdf` 会保存到当前目录，原书名中的非法字符会被替换为 `.`。
 
 ### 3. 注意事项
 
 部分书籍的资源位于 “文泉学堂” 、 “可知” 等平台，该程序会给出提示并终止，无法下载。
 
-一段时间后可能因 `jcclient` 和 `BotuReadKernel` 更新而无法运行，请及时更新 `config.json` 。
+一段时间后可能因 `jcclient` 更新而无法运行，请及时更新 `config.json`。
 
 ## LISENCE
 
