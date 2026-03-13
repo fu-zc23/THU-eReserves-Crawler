@@ -79,7 +79,7 @@ for bookId in bookList:
         # download JPG files and add to PDF
         for item in response:
             num += 1
-            sleep(random.uniform(0.2, 0.5))
+            sleep(random.uniform(0.1, 0.3))
             # retry 3 times if failed
             for i in range(4):
                 page = requests.get(f'{url}/JPGFile/DownJPGJsNetPage?filePath={item['hfsKey']}', headers=headers)
