@@ -14,7 +14,7 @@
 
 找到 `access` 请求，将请求标头中的 `Jcclient` 字段复制到 `config.json` 文件的对应位置。
 
-再将 `Referer` 字段中 `bookDetail/` 之后的编号复制到 `config.json` 中的 `bookId` 中。
+再将 `Referer` 字段中 `bookDetail/` 之后的编号复制到 `config.json` 中的 `bookList` 中。该字段支持多本书籍下载，用逗号分隔即可。
 
 ![bookDetail](/img/bookDetail.jpg)
 
