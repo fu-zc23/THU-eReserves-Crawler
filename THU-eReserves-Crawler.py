@@ -28,9 +28,11 @@ for bookId in bookList:
         "jcclient"      : jcclient,
         "user-agent"    : "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36"
     }
+    session = requests.Session()
+    session.headers.update(headers)
 
     # get book detail
-    response = json.loads(requests.get(f"{url}/userapi/MyBook/getBookDetail?bookId={bookId}", headers=headers).text)["data"]["jc_ebook_vo"]
+    response = json.loads(session.get(f"{url}/userapi/MyBook/getBookDetail?bookId={bookId}").text)["data"]["jc_ebook_vo"]
     sources  = response["urls"]
     title    = response["EBOOKNAME"]
     for source in sources:
@@ -44,17 +46,17 @@ for bookId in bookList:
 
     # get BotuReadKernel
     readurl  = source["READURL"]
-    response = requests.post("https://ereserves.lib.tsinghua.edu.cn/userapi/ReadBook/GetResourcesUrl", headers=headers, json={"id": readurl})
-    response = requests.get(response.json()["data"], allow_redirects=False)
+    response = session.post("https://ereserves.lib.tsinghua.edu.cn/userapi/ReadBook/GetResourcesUrl", json={"id": readurl})
+    response = session.get(response.json()["data"], allow_redirects=False)
     BotuReadKernel = response.cookies.get("BotuReadKernel")
-    headers["botureadkernel"] = BotuReadKernel
-    headers["cookie"] = "BotuReadKernel=" + BotuReadKernel
+    session.headers["botureadkernel"] = BotuReadKernel
+    session.cookies.set("BotuReadKernel", BotuReadKernel)
 
     # selectJgpBookChapters
     url      = url + "/readkernel"
     title    = re.sub(r"[\\/:*?\"<>|]", ".", title)
-    data     = {"SCANID": BeautifulSoup(requests.get(f"{url}/ReadJPG/JPGJsNetPage/{readurl}", headers=headers).text, "lxml").find("input", {"name": "scanid"}).get("value")}
-    chapters = json.loads(requests.post(f"{url}/KernelAPI/BookInfo/selectJgpBookChapters", headers=headers, data=data).text)["data"]
+    data     = {"SCANID": BeautifulSoup(session.get(f"{url}/ReadJPG/JPGJsNetPage/{readurl}").text, "lxml").find("input", {"name": "scanid"}).get("value")}
+    chapters = json.loads(session.post(f"{url}/KernelAPI/BookInfo/selectJgpBookChapters", data=data).text)["data"]
     pdf      = FPDF()
 
     # selectJgpBookChapter
@@ -64,7 +66,7 @@ for bookId in bookList:
         data = {"EMID": chapter["EMID"], "BOOKID": readurl}
         # retry 3 times if failed
         for i in range(4):
-            response = requests.post(f"{url}/KernelAPI/BookInfo/selectJgpBookChapter", headers=headers, data=data)
+            response = session.post(f"{url}/KernelAPI/BookInfo/selectJgpBookChapter", data=data)
             if response.status_code == 200:
                 response = response.json()
                 if response["code"] != 1:
@@ -86,7 +88,7 @@ for bookId in bookList:
             pformat = (210, 297)
             # retry 3 times if failed
             for i in range(4):
-                page = requests.get(f"{url}/JPGFile/DownJPGJsNetPage?filePath={hfs_key}", headers=headers)
+                page = session.get(f"{url}/JPGFile/DownJPGJsNetPage?filePath={hfs_key}")
                 if page.status_code == 200:
                     img = Image.open(BytesIO(page.content))
 
