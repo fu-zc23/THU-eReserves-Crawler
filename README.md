@@ -18,6 +18,8 @@
 
 ![bookDetail](/img/bookDetail.jpg)
 
+最后，可通过 `threads` 字段设置线程数，默认值为 `4`。
+
 ### 2. 运行程序
 
 确保安装所有依赖后运行该程序，注意 `fpdf` 需要安装 `fpdf2`。

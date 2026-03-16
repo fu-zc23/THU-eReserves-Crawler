@@ -2,5 +2,6 @@
     "jcclient": "",
     "bookList": [
         ""
-    ]
+    ],
+    "threads": 4
 }
