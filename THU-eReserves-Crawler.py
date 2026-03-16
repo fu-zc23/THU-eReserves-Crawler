@@ -5,6 +5,7 @@ import random
 import requests
 from fpdf import FPDF
 from PIL import Image
+from tqdm import tqdm
 from io import BytesIO
 from time import sleep
 from bs4 import BeautifulSoup
@@ -79,11 +80,10 @@ for bookId in bookList:
             sys.exit()
         response = response["data"]["JGPS"]
         # download JPG files and add to PDF
-        for item in response:
+        for item in tqdm(response, desc=chapter_name, unit="page"):
             num += 1
             hfs_key = item["hfsKey"]
             pformat = (210, 297)
-            sleep(random.uniform(0.1, 0.3))
             # retry 3 times if failed
             for i in range(4):
                 page = requests.get(f"{url}/JPGFile/DownJPGJsNetPage?filePath={hfs_key}", headers=headers)
