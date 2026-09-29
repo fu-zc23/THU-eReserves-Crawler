@@ -22,9 +22,10 @@
 
 ### 2. 运行程序
 
-确保安装所有依赖后运行该程序，注意 `fpdf` 需要安装 `fpdf2`。
+确保安装所有依赖后运行该程序：
 
 ```
+pip install -r requirements.txt
 python THU-eReserves-Crawler.py
 ```
 

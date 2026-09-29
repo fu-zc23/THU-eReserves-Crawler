@@ -1,0 +1,4 @@
+fpdf2
+pillow
+tqdm
+beautifulsoup4
